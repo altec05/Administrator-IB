@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/profile' %}">
+</head>
+<div class="page-content page-container" id="page-content">
+    <div class="padding">
+        <div class="row container d-flex justify-content-center">
+            <div class="col-xl-6 col-md-12">
+                <div class="card user-card-full">
+                    <div class="row m-l-0 m-r-0">
+                        <div class="col-sm-12 text-center">
+                            <div class="card-block">
+                                <h6 class="m-b-20 p-b-5 b-b-default f-w-600 mb-3 mt-3">Данные пользователя</h6>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <p class="m-b-10 f-w-600">Логин</p>
+                                        <h6 class="text-muted f-w-400">{{ user.username }}</h6>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p class="m-b-10 f-w-600">Email</p>
+                                        {% if user.email %}
+                                        <h6 class="text-muted f-w-400">{{ user.email }}</h6>
+                                        {% else %}
+                                        <h6 class="text-muted f-w-400">Не указан</h6>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6 mb-3 mt-2">
+                                        <a href="{% url 'password_change' %}" type="button" class="btn btn-outline-primary btn-sm">Сменить пароль</a>
+                                    </div>
+                                    <div class="col-sm-6 mb-3 mt-2">
+                                        <a href="{% url 'logout' %}" type="button" class="btn btn-outline-danger btn-sm">Выйти из аккаунта</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

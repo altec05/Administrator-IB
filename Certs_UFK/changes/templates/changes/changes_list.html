@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="mt-3">
+
+    <div class="list-group mb-3 mt-3">
+        {% if changes %}
+        {% for change in changes %}
+        {% if user.is_superuser %}
+        <a href="{% url 'admin:changes_version_change' change.id %}" class="list-group-item list-group-item-action"><strong>Версия {{ change }}</strong></a>
+        {% else %}
+        <button type="button" class="list-group-item text-start" disabled><strong>Версия {{ change }}</strong></button>
+        {% endif %}
+        <ul class="list-group list-group">
+            <button type="button" class="list-group-item text-start" disabled><p><strong>Содержание обновления</strong></p>{{ change.change_log.changes|linebreaks }}</button>
+        </ul>
+        {% endfor %}
+        {% else %}
+        <button type="button" class="list-group-item list-group-item-active text-start" disabled><strong>Работники</strong> - не найдены...</button>
+<!--        <button type="button" class="list-group-item list-group-item-action" disabled>Не найдены.</button>-->
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

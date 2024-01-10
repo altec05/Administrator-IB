@@ -1,0 +1,25 @@
+html, body {
+height: 100%;
+}
+body {
+display: flex;
+flex-direction: column;
+}
+
+.content {
+flex: 1 0 auto;
+}
+
+nav.navbar .dropdown:hover > .dropdown-menu {
+ display: block;
+}
+
+@media only screen and (max-device-width: 992px){
+    nav.navbar .dropdown:hover .dropdown-menu{
+        display: none;
+    }
+}
+
+ul {
+    list-style: none; /* Убирает буллиты */
+   }

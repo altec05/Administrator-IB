@@ -1,0 +1,43 @@
+{% for act in data %}
+<table>
+    <caption>Акты установки ПО</caption>
+    <tr>
+        <th>
+            Дата акта
+        </th>
+        <th>
+            2
+        </th>
+        <th>
+            3
+        </th>
+        <th>
+            4
+        </th>
+        <th>
+            5
+        </th>
+    </tr>
+    <tr>
+        <td>
+            {{ act.date }}
+        </td>
+        <td>
+            {{ act.address_of_install }}
+        </td>
+        <td>
+            ПО: <br/>{% for soft in act.soft_installed.all %}{{ soft }}<br/>{% endfor %}
+        </td>
+        <td>
+            {{ act.owner }}
+        </td>
+        <td>
+            {{ act.file_path }}
+        </td>
+        <td>
+            <a href="{{ act.file.url }}">СКАЧАТЬ АКТ</a>
+        </td>
+    </tr>
+</table>
+
+{% endfor %}

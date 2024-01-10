@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<section>
+    <div class="mt-6 mb-5">
+        <div class="d-flex justify-content-center align-items-center">
+            <div class="container">
+                <div class="row d-flex justify-content-center">
+                    <div class="col-12 col-md-8 col-lg-4">
+                        <div class="card card-bg">
+                            <div class="card-body p-5">
+                                <form method="POST" enctype="multipart/form-data" class="form-floating mb-3" multiple="multiple">
+                                    {% csrf_token %}
+
+                                    {{ form.as_p }}
+                                    <button type="submit">Загрузка</button>
+
+                                    <!--                                    <p class="mb-5 text-center">Укажите сертификат для обработки</p>-->
+                                    <!--                                    <div class="mb-3 mt-md-4">-->
+                                    <!--                                        <div class="form-file">-->
+                                    <!--                                            <input type="file" class="form-file-input" id="customFile">-->
+                                    <!--                                            <label class="form-file-label" for="customFile">-->
+                                    <!--                                                <span class="form-file-text">Укажите файл сертификата...</span>-->
+                                    <!--                                                <span class="form-file-button">Обзор</span>-->
+                                    <!--                                            </label>-->
+                                    <!--                                        </div>-->
+                                    <!--                                        <div class="col-12 d-grid">-->
+                                    <!--                                            <button class="btn btn-primary rounded-pill" type="submit">Загрузить-->
+                                    <!--                                            </button>-->
+                                    <!--                                        </div>-->
+                                    <!--                                    </div>-->
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

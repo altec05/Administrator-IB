@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<section>
+    <div class="mt-10 mb-5">
+        <div class="d-flex justify-content-center align-items-center">
+            <div class="container">
+                <div class="row d-flex justify-content-center">
+                    <div class="col-12 col-md-8 col-lg-4">
+                        <div class="card card-bg">
+                            <div class="card-body p-5">
+                                <form action="{% url 'login' %}" method="POST" class="form-floating mb-3">
+                                    {% csrf_token %}
+                                    <div class="mb-3 mt-md-4">
+                                        <p class="mb-5 text-center h3">Форма авторизации</p>
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control input-box form-ensurance-header-control" placeholder="Логин" name="username">
+                                            <label for="username">Логин</label>
+                                        </div>
+                                        <div class="form-floating mt-3">
+                                            <input type="password" class="form-control input-box form-ensurance-header-control" placeholder="Пароль" name="password">
+                                            <label for="password">Пароль</label>
+                                        </div>
+                                        <div class="col-12 d-grid mt-3">
+                                            <button class="btn btn-primary rounded-pill" type="submit">Войти</button>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p class="mb-0  text-center">
+                                            Забыли пароль? <a href="{% url 'password_reset' %}" class="text-primary fw-bold">Сбросить пароль</a>
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <p class="mb-0 mt-3 text-center text-muted">
+                                            Внимание! Регистрация учетных записей производится только администратором!
+                                        </p>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

@@ -1,0 +1,13 @@
+{% extends 'admin/base_site.html' %}
+
+{% block content %}
+    <div>
+        <form action="." method="POST" enctype="multipart/form-data">
+            <input type="file" name="import_files" multiple>
+<!--            {{ form.as_p }}-->
+            {% csrf_token %}
+            <input type="submit" value="Импортировать из XLSX">
+        </form>
+    </div>
+    <br />
+{% endblock %}
