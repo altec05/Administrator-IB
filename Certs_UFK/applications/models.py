@@ -26,34 +26,6 @@ class TOFK(models.Model):
         verbose_name_plural = 'ТОФК'
 
 
-# # Данные получателя
-# class Subject(models.Model):
-#     worker = models.ForeignKey(Worker, on_delete=models.PROTECT, verbose_name='Получатель')
-#     tofk = models.CharField(max_length=200, verbose_name='ТОФК', blank=True)
-#     city_1 = models.CharField(max_length=200, verbose_name='Город', blank=True)
-#     passport_series = models.CharField(max_length=4, verbose_name='Серия паспорта', blank=True)
-#     passport_number = models.CharField(max_length=6, verbose_name='Номер паспорта', blank=True)
-#     passport_from_date = models.DateField(verbose_name='Когда выдан', blank=True)
-#     passport_from_code = models.CharField(max_length=7, verbose_name='Код места выдачи', blank=True)
-#     date_of_birth = models.DateField(verbose_name='Дата рождения', blank=True)
-#     place_of_birth = models.CharField(max_length=255, verbose_name='Место рождения', blank=True)
-#     gender = models.CharField(max_length=6, verbose_name='Пол', blank=True)
-#     last_name = models.CharField(max_length=200, verbose_name='Фамилия', blank=True)
-#     first_name = models.CharField(max_length=200, verbose_name='Имя', blank=True)
-#     patronymic = models.CharField(max_length=200, verbose_name='Отчество', blank=True)
-#     inn = models.CharField(max_length=12, verbose_name='ИНН', blank=True)
-#     snils = models.CharField(max_length=14, verbose_name='СНИЛС', blank=True)
-#     job = models.CharField(max_length=200, verbose_name='Должность', blank=True)
-#     email = models.EmailField(max_length=200, verbose_name='Почта', blank=True)
-#     city_2 = models.CharField(max_length=200, verbose_name='Город', blank=True)
-#     document_name = models.CharField(max_length=200, verbose_name='Название документа', blank=True)
-#     document_date = models.DateField(verbose_name='Дата документа', blank=True, null=True)
-#     document_number = models.CharField(max_length=200, verbose_name='Номер документа', blank=True)
-#     document_path = models.CharField(max_length=255, verbose_name='Путь до документа', blank=True)
-#     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
-#     updated_at = models.DateTimeField(auto_now=True, verbose_name='Дата изменения')
-#     note = models.TextField(verbose_name='Примечание', blank=True)
-
 # Данные получателя
 class Subject(models.Model):
     help_text = models.TextField(verbose_name='ВНИМАНИЕ!', blank=True, default='Для подтягивания значений из '
@@ -80,7 +52,7 @@ class Subject(models.Model):
     snils = models.CharField(max_length=14, verbose_name='СНИЛС', validators=[MinLengthValidator(11), MaxLengthValidator(14)], blank=True, null=True)
     job = models.CharField(max_length=200, verbose_name='Должность', blank=True, null=True)
     email = models.EmailField(max_length=200, verbose_name='Почта', blank=True, null=True, default='ikdomashenko@kkck.ru')
-    city_2 = models.CharField(max_length=200, verbose_name='Город', blank=True, null=True)
+    city_2 = models.CharField(max_length=200, verbose_name='Населенный пункт', blank=True, null=True)
     document_name = models.CharField(max_length=200, verbose_name='Название документа', blank=True, null=True)
     document_date = models.DateField(verbose_name='Дата документа', blank=True, null=True)
     document_number = models.CharField(max_length=200, verbose_name='Номер документа', blank=True, null=True)
@@ -142,9 +114,9 @@ class Application(models.Model):
                               verbose_name='Тип запроса')
     subject = models.ForeignKey(Subject, on_delete=models.PROTECT, verbose_name='Получатель')
     req_formed = models.BooleanField(default=False, verbose_name='Запрос сф-н')
-    req_name = models.CharField(max_length=200, verbose_name='Имя файла запроса', blank=True, unique=True)
+    req_name = models.CharField(max_length=200, verbose_name='Имя файла запроса', blank=True, unique=True, help_text='Имя папки на носителе, созданной после генерации запроса')
     req_url = models.URLField(verbose_name='Ссылка на черновик запроса', blank=True, unique=True)
-    req_code = models.CharField(max_length=10, verbose_name='Код запроса', blank=True, unique=True)
+    req_code = models.CharField(max_length=10, verbose_name='Номер запроса', blank=True, unique=True)
     doc_requested = models.BooleanField(default=False, verbose_name='Выписка запрошена')
     doc_requested_data = models.DateField(verbose_name='Дата запроса', blank=True, null=True)
     doc_signed = models.BooleanField(default=False, verbose_name='Выписка подписана')
@@ -152,13 +124,14 @@ class Application(models.Model):
     doc_path = models.CharField(max_length=500, verbose_name='Путь до выписки', blank=True, null=True)
     ap_formed = models.BooleanField(default=False, verbose_name='Заявление сф-но')
     ap_sent = models.BooleanField(default=False, verbose_name='Заявление передано получателю')
+    ap_sent_data = models.DateField(verbose_name='Дата передачи з-я', blank=True, null=True)
     ap_signed = models.BooleanField(default=False, verbose_name='Заявление подп-но')
     ap_path = models.CharField(max_length=500, verbose_name='Путь до заявления', blank=True, null=True)
     req_send = models.BooleanField(default=False, verbose_name='Запрос отпр-н')
     req_approved = models.BooleanField(default=False, verbose_name='Запрос одобрен')
     need_go = models.BooleanField(default=False, verbose_name='Сказано сходить для передачи документов')
     need_go_to = models.DateField(verbose_name='Сходить до', blank=True, null=True)
-    cert_done = models.BooleanField(default=False, verbose_name='Сер-т готов')
+    cert_done = models.BooleanField(default=False, verbose_name='Серт. готов')
     need_go_2 = models.BooleanField(default=False, verbose_name='Сказано сходить для получения')
     need_go_to_2 = models.DateField(verbose_name='Уведомил сотрудника', blank=True, null=True)
     cert_get = models.BooleanField(default=False, verbose_name='Сер-т получен')
@@ -174,7 +147,7 @@ class Application(models.Model):
     token_sn = models.CharField(max_length=500, verbose_name='Серийный номер токена', blank=True, null=True)
     sign_done = models.BooleanField(default=False, verbose_name='ЭП уст-на')
     sign_1c_done = models.BooleanField(default=False, verbose_name='ЭП доб-на в 1С')
-    certificate_done = models.BooleanField(default=False, verbose_name='ЭП ✔')
+    certificate_done = models.BooleanField(default=False, verbose_name='✔', help_text='Заявление считается завершенным, если все этапы пройдены, включая установку на ПК, но без учета добавления в 1С')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания', blank=True)
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Дата изменения', blank=True)
     note = models.TextField(verbose_name='Примечание', blank=True)
@@ -229,7 +202,7 @@ class Application(models.Model):
             if self.cert_get and not self.need_go_2:
                 raise ValidationError({'need_go_2': "Сертификат уже получен!"})
 
-            if self.cert_get and not self.certificate:
+            if self.cert_get and self.token_done and not self.certificate:
                 raise ValidationError({'certificate': "Укажите полученный сертификат!"})
 
             if self.certificate and not self.cert_get:
@@ -242,7 +215,7 @@ class Application(models.Model):
                 raise ValidationError({'token_done': "ЭП уже была установлена сотруднику!"})
 
     class Meta:
-        ordering = ['city', 'a_type', 'subject']
+        ordering = ['-created_at']
         verbose_name = 'Заявление'
         verbose_name_plural = 'Заявления'
 

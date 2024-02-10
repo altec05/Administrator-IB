@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+<div>
+    {% if user.is_authenticated %}
+    <h3 class="mb-3">Привет, {{ user.username }}!</h3>
+
+    <span>
+        Выберите раздел администрирования, в который хотите перейти
+    </span>
+    <div class="row d-flex justify-content-left">
+        <div class="col-12 col-md-8 col-lg-5">
+            <div class="list-group mb-3 mt-3 text-start">
+                <ul class="list-group list-group-flush">
+                    {% if user.is_superuser %}
+                    <li class="list-group-item"><a href="{% url 'admin:applications_application_changelist' %}"
+                                                   class="link-underline link-underline-opacity-0">Заявления на выпуск
+                        ЭП в УЦ ФК</a></li>
+                    {% endif %}
+                    <li class="list-group-item"><a href="{% url 'admin:certs_cerificate_changelist' %}"
+                                                   class="link-underline link-underline-opacity-0">Сертификаты ЭП</a>
+                    </li>
+                    <li class="list-group-item"><a href="{% url 'admin:licenses_license_changelist' %}"
+                                                   class="link-underline link-underline-opacity-0">Лицензии</a></li>
+                    {% if user.is_superuser %}
+                    <li class="list-group-item"><a href="{% url 'admin:workers_worker_changelist' %}"
+                                                   class="link-underline link-underline-opacity-0">Работники</a></li>
+
+                    <li class="list-group-item"><a href="{% url 'admin:changes_version_changelist' %}"
+                                                   class="link-underline link-underline-opacity-0">Версии</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <p>Войдите в аккаунт.</p>
+    <a href="{% url 'login' %}">Авторизация</a>
+    {% endif %}
+</div>
+
+{% endblock %}

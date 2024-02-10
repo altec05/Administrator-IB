@@ -33,12 +33,49 @@ class DepartmentAdmin(admin.ModelAdmin):
 #         obj.save()
 
 
+from django.contrib.admin import SimpleListFilter
+from django.utils.translation import gettext_lazy as _
+
+
+class StatusFilter(SimpleListFilter):
+    title = _('Статус работника')
+
+    parameter_name = 'visibility_custom'
+
+    def lookups(self, request, model_admin):
+        return (
+            (None, _('Все действующие')),
+            ('True', _('Видимый')),
+            ('False', _('Скрытый')),
+            ('all', _('ВСЕ')),
+        )
+
+    def choices(self, cl):
+        for lookup, title in self.lookup_choices:
+            yield {
+                'selected': self.value() == lookup,
+                'query_string': cl.get_query_string({
+                    self.parameter_name: lookup,
+                }, []),
+                'display': title,
+            }
+
+    def queryset(self, request, queryset):
+        print(self.value())
+        if self.value() in ('True', 'False'):
+            return queryset.filter(visibility=self.value())
+        if self.value() == 'all':
+            return queryset.filter()
+        if self.value() is None:
+            return queryset.filter(visibility='True')
+
+
 class WorkerAdmin(admin.ModelAdmin):
     list_display = ('city', 'last_name', 'first_name', 'patronymic', 'job', 'department', 'visibility', 'updated_at',
                     'created_at')
     list_display_links = ('last_name',)
     search_fields = ('last_name', 'job')
-    list_filter = ('city', 'department', 'job', 'visibility', 'gender')
+    list_filter = (StatusFilter, 'city', 'gender', 'department', 'job')
     readonly_fields = ('created_at', 'updated_at' , 'full_name')
     fields = ('city', 'last_name', 'first_name', 'patronymic', 'full_name', 'job', 'department', 'gender', 'email', 'visibility',
               'created_at', 'updated_at')

@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="mt-3">
+    <div>
+        <a type="button" href="{% url 'pick_worker' %}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Назад</a>
+    </div>
+    {% if user.is_authenticated %}
+    <!--    <h1><a href="{% url 'admin:workers_worker_change' main.id %}">{{ main }}</a></h1>-->
+
+    <div class="list-group mb-3 mt-3">
+        {% if workers %}
+        <button type="button" class="list-group-item list-group-item-active text-start" disabled><strong>Работники</strong></button>
+        {% for worker in workers %}
+        <ul class="list-group list-group">
+            <a href="{% url 'admin:workers_worker_change' worker.id %}" class="list-group-item list-group-item-action">{{ worker }}</a>
+        </ul>
+        {% endfor %}
+        {% else %}
+        <button type="button" class="list-group-item list-group-item-active text-start" disabled><strong>Работники</strong> - не найдены...</button>
+<!--        <button type="button" class="list-group-item list-group-item-action" disabled>Не найдены.</button>-->
+        {% endif %}
+    </div>
+
+    <div class="list-group mb-3">
+        {% if user.is_superuser %}
+        {% if applications %}
+        <button type="button" class="list-group-item list-group-item-active text-start" disabled><strong>Заявления</strong> - {{ len_applications }}</button>
+        {% for application in applications %}
+        <ul class="list-group list-group">
+            <a href="{% url 'admin:applications_application_change' application.id %}" class="list-group-item list-group-item-action">{{ application }}</a>
+        </ul>
+        {% endfor %}
+        {% else %}
+        <button type="button" class="list-group-item list-group-item-active text-start" disabled><strong>Заявления</strong> - не найдены...</button>
+<!--        <button type="button" class="list-group-item list-group-item-action" disabled>Не найдены.</button>-->
+        {% endif %}
+        {% endif %}
+    </div>
+
+    <div class="list-group mt-3 mb-3">
+<!--        <a href="{% url 'admin:workers_worker_change' main.id %}" class="list-group-item list-group-item-action active"-->
+<!--           aria-current="true">-->
+<!--            {{ main }}-->
+<!--        </a>-->
+        {% if certs %}
+        <button type="button" class="list-group-item list-group-item-active text-start" disabled><strong>Сертификаты</strong> - {{ len_certs }}</button>
+        {% for cert in certs %}
+        <ul class="list-group list-group">
+            <a href="{% url 'admin:certs_cerificate_change' cert.id %}" class="list-group-item list-group-item-action">{{ cert }}</a>
+        </ul>
+        {% endfor %}
+        {% else %}
+        <button type="button" class="list-group-item list-group-item-active text-start" disabled><strong>Сертификаты</strong> - не найдены...</button>
+<!--        <button type="button" class="list-group-item list-group-item-action" disabled>Не найдены.</button>-->
+        {% endif %}
+    </div>
+
+    <div class="list-group mb-3">
+        {% if licenses %}
+        <button type="button" class="list-group-item list-group-item-active text-start" disabled><strong>Лицензии</strong> - {{ len_licenses }}</button>
+        {% for lic in licenses %}
+        <ul class="list-group list-group">
+            <a href="{% url 'admin:licenses_license_change' lic.id %}" class="list-group-item list-group-item-action">{{ lic }}</a>
+        </ul>
+        {% if installations %}
+        <button type="button" class="list-group-item list-group-item-active text-start" disabled><strong>Установки</strong> - {{ len_licenses }}</button>
+        {% for install in installations %}
+        <ul class="list-group list-group">
+            <a href="{% url 'admin:licenses_installation_change' install.id %}" class="list-group-item list-group-item-action">{{ install }}</a>
+        </ul>
+        {% endfor %}
+        {% endif %}
+        {% endfor %}
+        {% else %}
+        <button type="button" class="list-group-item list-group-item-active text-start" disabled><strong>Лицензии</strong> - не найдены...</button>
+<!--        <button type="button" class="list-group-item list-group-item-action" disabled>Не найдены.</button>-->
+        {% endif %}
+    </div>
+
+    {% else %}
+    <a href="{% url 'login' %}" class="">Авторизация</a>
+    <p>Войдите в аккаунт чтобы увидеть данные.</p>
+    {% endif %}
+</div>
+{% endblock %}

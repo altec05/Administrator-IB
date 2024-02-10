@@ -1,9 +1,7 @@
 from django.contrib import admin
-from .models import Program, Address, ActOfInstall, License, Installation, InstallSoft, Building
-from workers.models import Worker, City_Choices
-import datetime
+from .models import Program, Address, License, Installation, InstallSoft, Building
+from workers.models import Worker
 from Certs_UFK.export_to_excel import export_licens
-from django.contrib.admin import SimpleListFilter
 import nested_admin
 
 
@@ -29,11 +27,6 @@ class AddressAdmin(admin.ModelAdmin):
     search_fields = ('cabinet', 'inventory_number', 'note')
     # fields = [field.name for field in Address._meta.get_fields() if field.name != "id"]
 
-    # def formfield_for_foreignkey(self, db_field, request, **kwargs):
-    #     if db_field.name == "owner":
-    #         kwargs["queryset"] = Worker.objects.order_by('last_name')
-    #     return super(AddressAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
-
 
 class InstallInline(nested_admin.NestedTabularInline):
     model = InstallSoft
@@ -45,10 +38,8 @@ class ActOfInstallAdmin(admin.ModelAdmin):
     list_display = ('date', 'owner')
     list_display_links = ('date',)
     search_fields = ('owner',)
-    # filter_horizontal = ('soft_installed',)
     autocomplete_fields = ['address_of_install',]
     readonly_fields = ['file_path']
-    # inlines = [InstallInline]
 
     def save_model(self, request, obj, form, change):
         # Если нужно очистить файл, то удаляем
@@ -96,7 +87,6 @@ class LicenseInline(nested_admin.NestedStackedInline):
             kwargs["queryset"] = Worker.objects.order_by('last_name')
         return super(LicenseInline, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
-    # autocomplete_fields = ['place', 'act']
     autocomplete_fields = ['place']
     inlines = [InstallInline]
 
@@ -105,7 +95,7 @@ class LicenseAdmin(nested_admin.NestedModelAdmin):
     save_on_top = True
     list_display = ('program', 'serial_number', 'amount', 'total_left', 'date_of_receiving', 'installed', 'city_installed', 'places_installed', 'subjects_install', 'updated_at')
     list_display_links = ('program',)
-    search_fields = ('program__name', 'serial_number', 'installation__place__note', 'installation__place__inventory_number', 'installation__place__cabinet', 'installation__subject__full_name')
+    search_fields = ('program__name', 'program__version', 'serial_number', 'amount', 'files_path', 'received_from', 'installation__place__note', 'installation__place__inventory_number', 'installation__place__cabinet', 'installation__subject__full_name')
     list_filter = ('installed', 'installation__city_of_install', 'program__name')
     readonly_fields = ('created_at', 'updated_at', 'total_left')
     inlines = [LicenseInline]
@@ -121,7 +111,6 @@ class LicenseAdmin(nested_admin.NestedModelAdmin):
 
     def save_model(self, request, obj, form, change):
         if form.is_valid():
-            # if License.objects.filter(installation__lic=obj.pk):
             if Installation.objects.filter(lic=obj.pk):
                 if not obj.installed:
                     obj.installed = True
@@ -130,7 +119,7 @@ class LicenseAdmin(nested_admin.NestedModelAdmin):
                     obj.installed = False
         obj.save()
 
-    export_licens.short_description = "Выгрузка в Excel, (.xlsx)"
+    export_licens.short_description = "Выгрузка в Excel (.xlsx)"
 
     actions = [export_licens]
 
@@ -148,14 +137,11 @@ class InstallationAdmin(admin.ModelAdmin):
 class InstallAdmin(admin.ModelAdmin):
     save_on_top = True
     list_display = ('install', 'program', 'distr_version')
-    # list_display_links = ('lic',)
     search_fields = ('distr_version', 'program__name')
-    # list_filter = ('city_of_install',)
 
 
 admin.site.register(Program, ProgramAdmin)
 admin.site.register(Address, AddressAdmin)
-# admin.site.register(ActOfInstall, ActOfInstallAdmin)
 admin.site.register(License, LicenseAdmin)
 admin.site.register(Building, BuildingAdmin)
 admin.site.register(Installation, InstallationAdmin)
